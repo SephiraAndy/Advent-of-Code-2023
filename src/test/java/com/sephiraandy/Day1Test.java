@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.*;
 
 public class Day1Test {
     @Test
-    void sumOfCalibrationValues() {
+    void part1() {
         var input = """
             1abc2
             pqr3stu8vwx
@@ -18,7 +18,7 @@ public class Day1Test {
     }
 
     @Test
-    void sumOfCalibrationValuesWithWords() {
+    void part2() {
         var input = """
             two1nine
             eightwothree

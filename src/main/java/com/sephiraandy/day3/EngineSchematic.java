@@ -60,11 +60,10 @@ class EngineSchematic {
     }
 
     public Collection<Gear> getGears() {
-        final var gears = new ArrayList<Gear>();
-        for (var lineNumber = 0; lineNumber < schematic.length; ++lineNumber) {
-            gears.addAll(getGearsFromLine(lineNumber));
-        }
-        return gears;
+        return IntStream.range(0, schematic.length)
+            .mapToObj(this::getGearsFromLine)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
     }
 
     private Collection<? extends Gear> getGearsFromLine(final int lineNumber) {

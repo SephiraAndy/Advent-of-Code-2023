@@ -1,6 +1,6 @@
 package com.sephiraandy.day3;
 
-import com.sephiraandy.util.InputRetriever;
+import com.sephiraandy.util.Input;
 
 import java.io.IOException;
 
@@ -16,12 +16,12 @@ public class Day3 {
         return EngineSchematic.parse(input)
             .getGears()
             .stream()
-            .map(Gear::ratio)
-            .reduce(0, Integer::sum);
+            .mapToInt(Gear::ratio)
+            .sum();
     }
 
     public static void main(final String[] args) throws IOException {
-        final var input = InputRetriever.get("input/Day3");
+        final var input = Input.loadTextFromFile("input/Day3");
         System.out.println(solve1(input));
         System.out.println(solve2(input));
     }
