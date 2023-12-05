@@ -10,10 +10,18 @@ public record SeedMapData(
     }
 
     public boolean isInRange(long seed) {
-        return seed >= sourceRangeStart && seed < sourceRangeStart + rangeLength;
+        return seed >= sourceRangeStart && seed < upper();
     }
 
     public long map(long seed) {
         return seed - sourceRangeStart + destinationRangeStart;
+    }
+
+    public long upper() {
+        return sourceRangeStart + rangeLength;
+    }
+
+    public boolean isUnderRange(long seed) {
+        return seed < sourceRangeStart;
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 public class Seeds {
 
@@ -38,5 +39,13 @@ public class Seeds {
         }
 
         return stream.parallel();
+    }
+
+    public Stream<SeedRange> rangeStream() {
+        final var ranges = new ArrayList<SeedRange>();
+        for (var seedRangeStart = 0; seedRangeStart < seedList.size(); seedRangeStart += 2) {
+            ranges.add(new SeedRange(seedList.get(seedRangeStart), seedList.get(seedRangeStart + 1)));
+        }
+        return ranges.stream();
     }
 }
