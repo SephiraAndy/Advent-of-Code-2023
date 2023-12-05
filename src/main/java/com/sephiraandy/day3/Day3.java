@@ -3,8 +3,13 @@ package com.sephiraandy.day3;
 import com.sephiraandy.util.Puzzle;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public class Day3 extends Puzzle<Integer> {
+    public Day3(Consumer<String> runTimeLogConsumer) {
+        super(runTimeLogConsumer);
+    }
+
     public Integer solve1(final String input) {
         return EngineSchematic.parse(input)
             .getPartNumbers()
@@ -21,6 +26,6 @@ public class Day3 extends Puzzle<Integer> {
     }
 
     public static void main(final String[] args) throws IOException {
-        new Day3().solve("input/Day3");
+        new Day3(System.out::print).solve("input/Day3");
     }
 }

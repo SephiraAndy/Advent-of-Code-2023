@@ -4,8 +4,13 @@ import com.sephiraandy.util.Input;
 import com.sephiraandy.util.Puzzle;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public class Day2 extends Puzzle<Integer> {
+
+    public Day2(Consumer<String> runTimeLogConsumer) {
+        super(runTimeLogConsumer);
+    }
 
     public Integer solve1(String input) {
         return Input.lineStream(input)
@@ -23,6 +28,6 @@ public class Day2 extends Puzzle<Integer> {
     }
 
     public static void main(String[] args) throws IOException {
-        new Day2().solve("input/Day2");
+        new Day2(System.out::print).solve("input/Day2");
     }
 }

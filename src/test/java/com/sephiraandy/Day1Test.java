@@ -14,7 +14,7 @@ public class Day1Test {
             a1b2c3d4e5f
             treb7uchet""";
 
-        assertThat(Day1.solve1(input)).isEqualTo(142);
+        assertThat(new Day1(s -> {}).solve1(input)).isEqualTo(142);
     }
 
     @Test
@@ -28,6 +28,6 @@ public class Day1Test {
             zoneight234
             7pqrstsixteen""";
 
-        assertThat(Day1.solve2(input)).isEqualTo(281);
+        assertThat(new Day1(s-> {}).solve2(input)).isEqualTo(281);
     }
 }

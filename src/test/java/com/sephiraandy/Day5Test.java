@@ -44,11 +44,11 @@ public class Day5Test {
 
     @Test
     void part1() {
-        assertThat(Day5.solve1(INPUT)).isEqualTo(35);
+        assertThat(new Day5(s -> {}).solve1(INPUT)).isEqualTo(35);
     }
 
     @Test
     void part2() {
-        assertThat(Day5.solve2(INPUT)).isEqualTo(46);
+        assertThat(new Day5(s -> {}).solve2(INPUT)).isEqualTo(46);
     }
 }

@@ -3,10 +3,15 @@ package com.sephiraandy.day1;
 import com.sephiraandy.util.Puzzle;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import static com.sephiraandy.util.Input.lineStream;
 
 public class Day1 extends Puzzle<Integer> {
+
+    public Day1(Consumer<String> runTimeLogConsumer) {
+        super(runTimeLogConsumer);
+    }
 
     public Integer solve1(final String input) {
         return lineStream(input)
@@ -23,7 +28,7 @@ public class Day1 extends Puzzle<Integer> {
     }
 
     public static void main(String[] args) throws IOException {
-        new Day1().solve("input/Day1");
+        new Day1(System.out::print).solve("input/Day1");
     }
 
 }

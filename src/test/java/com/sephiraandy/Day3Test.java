@@ -20,7 +20,7 @@ public class Day3Test {
             ...$.*....
             .664.598..""";
 
-        final var solution = Day3.solve1(input);
+        final var solution = new Day3(s -> {}).solve1(input);
 
         Assertions.assertThat(solution).isEqualTo(4361);
     }
@@ -39,7 +39,7 @@ public class Day3Test {
             ...$.*....
             .664.598..""";
 
-        final var solution = Day3.solve2(input);
+        final var solution = new Day3(s -> {}).solve2(input);
 
         Assertions.assertThat(solution).isEqualTo(467835);
     }

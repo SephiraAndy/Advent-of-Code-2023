@@ -5,9 +5,14 @@ import com.sephiraandy.util.Puzzle;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 public class Day4 extends Puzzle<Integer> {
+    public Day4(Consumer<String> runTimeLogConsumer) {
+        super(runTimeLogConsumer);
+    }
+
     public Integer solve1(String input) {
         return Input.lineStream(input)
             .map(Card::parse)
@@ -38,6 +43,6 @@ public class Day4 extends Puzzle<Integer> {
     }
 
     public static void main(String[] args) throws IOException {
-        new Day4().solve("input/Day4");
+        new Day4(System.out::print).solve("input/Day4");
     }
 }

@@ -15,7 +15,7 @@ public class Day2Test {
             Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
             Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green""";
 
-        final var answer = Day2.solve1(input);
+        final var answer = new Day2(s -> {}).solve1(input);
 
         assertThat(answer).isEqualTo(8);
     }
@@ -29,7 +29,7 @@ public class Day2Test {
             Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
             Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green""";
 
-        final var answer = Day2.solve2(input);
+        final var answer = new Day2(s -> {}).solve2(input);
 
         assertThat(answer).isEqualTo(2286);
     }

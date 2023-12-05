@@ -4,10 +4,15 @@ import com.sephiraandy.util.Input;
 import com.sephiraandy.util.Puzzle;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import static com.sephiraandy.day5.SeedMap.fetchData;
 
 public class Day5 extends Puzzle<Long> {
+    public Day5(Consumer<String> runTimeLogConsumer) {
+        super(runTimeLogConsumer);
+    }
+
     public Long solve1(final String input) {
         final var lines = Input.asLines(input);
         return Seeds.parse(lines[0]).stream()
@@ -37,6 +42,6 @@ public class Day5 extends Puzzle<Long> {
     }
 
     public static void main(final String[] args) throws IOException {
-        new Day5().solve("input/Day5");
+        new Day5(System.out::print).solve("input/Day5");
     }
 }

@@ -1,8 +1,8 @@
 package com.sephiraandy;
 
+import com.sephiraandy.day4.Day4;
 import org.junit.jupiter.api.Test;
 
-import static com.sephiraandy.day4.Day4.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day4Test {
@@ -17,11 +17,11 @@ public class Day4Test {
 
     @Test
     void part1() {
-        assertThat(solve1(INPUT)).isEqualTo(13);
+        assertThat(new Day4(s -> {}).solve1(INPUT)).isEqualTo(13);
     }
 
     @Test
     void part2() {
-        assertThat(solve2(INPUT)).isEqualTo(30);
+        assertThat(new Day4(s -> {}).solve2(INPUT)).isEqualTo(30);
     }
 }
