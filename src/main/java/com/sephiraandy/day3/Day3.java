@@ -25,7 +25,7 @@ public class Day3 extends Puzzle<Integer> {
             .sum();
     }
 
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String[] args) {
         new Day3(System.out::print).solve("input/Day3");
     }
 }

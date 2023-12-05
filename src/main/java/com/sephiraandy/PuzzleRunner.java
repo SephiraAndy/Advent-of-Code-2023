@@ -9,30 +9,27 @@ import com.sephiraandy.day5.Day5;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public class PuzzleRunner {
     public static void main(String[] args) throws IOException {
 
-        final var reportBuilder = new StringBuilder("# Run Times\n\n");
+        final var reportBuilder = new StringBuilder("# Run Times\n");
 
-        reportBuilder.append("## Day 1\n\n```\n");
-        new Day1(reportBuilder::append).solve("input/Day1");
-        reportBuilder.append("```\n\n");
-        reportBuilder.append("## Day 2\n\n```\n");
-        new Day2(reportBuilder::append).solve("input/Day2");
-        reportBuilder.append("```\n\n");
-        reportBuilder.append("## Day 3\n\n```\n");
-        new Day3(reportBuilder::append).solve("input/Day3");
-        reportBuilder.append("```\n\n");
-        reportBuilder.append("## Day 4\n\n```\n");
-        new Day4(reportBuilder::append).solve("input/Day4");
-        reportBuilder.append("```\n\n");
-        reportBuilder.append("## Day 5\n\n```\n");
-        new Day5(reportBuilder::append).solve("input/Day5");
-        reportBuilder.append("```\n\n");
+        log(reportBuilder, 1, new Day1(reportBuilder::append)::solve);
+        log(reportBuilder, 2, new Day2(reportBuilder::append)::solve);
+        log(reportBuilder, 3, new Day3(reportBuilder::append)::solve);
+        log(reportBuilder, 4, new Day4(reportBuilder::append)::solve);
+        log(reportBuilder, 5, new Day5(reportBuilder::append)::solve);
 
         try (final var fileWriter = new FileWriter(new File("RunTimes.md"))) {
             fileWriter.write(reportBuilder.toString());
         }
+    }
+
+    private static void log(StringBuilder reportBuilder, int day, Consumer<String> puzzle) {
+        reportBuilder.append("\n## Day ").append(day).append("\n\n```\n");
+        puzzle.accept("input/Day" + day);
+        reportBuilder.append("```\n");
     }
 }

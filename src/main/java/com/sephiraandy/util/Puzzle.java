@@ -14,9 +14,14 @@ public abstract class Puzzle<T> {
         this.runTimeLogConsumer = runTimeLogConsumer;
     }
 
-    public void solve(String inputPath) throws IOException {
+    public void solve(String inputPath) {
         var start = System.currentTimeMillis();
-        final var input = Input.loadTextFromFile(inputPath);
+        final String input;
+        try {
+            input = Input.loadTextFromFile(inputPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         var end = System.currentTimeMillis();
         runTimeLogConsumer.accept("input file load time " + (end - start) + "ms.\n");
 

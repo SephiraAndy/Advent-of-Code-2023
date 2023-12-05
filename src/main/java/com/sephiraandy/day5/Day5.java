@@ -41,7 +41,7 @@ public class Day5 extends Puzzle<Long> {
             .orElse(0L);
     }
 
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String[] args) {
         new Day5(System.out::print).solve("input/Day5");
     }
 }

@@ -3,32 +3,32 @@
 ## Day 1
 
 ```
-input file load time 5ms.
-part 1 execution time 21ms.
-part 2 execution time 25ms.
+input file load time 4ms.
+part 1 execution time 16ms.
+part 2 execution time 26ms.
 ```
 
 ## Day 2
 
 ```
-input file load time 0ms.
+input file load time 1ms.
 part 1 execution time 7ms.
-part 2 execution time 5ms.
+part 2 execution time 3ms.
 ```
 
 ## Day 3
 
 ```
 input file load time 1ms.
-part 1 execution time 16ms.
-part 2 execution time 5ms.
+part 1 execution time 19ms.
+part 2 execution time 6ms.
 ```
 
 ## Day 4
 
 ```
 input file load time 1ms.
-part 1 execution time 11ms.
+part 1 execution time 12ms.
 part 2 execution time 7ms.
 ```
 
@@ -36,7 +36,6 @@ part 2 execution time 7ms.
 
 ```
 input file load time 0ms.
-part 1 execution time 12ms.
-part 2 execution time 46131ms.
+part 1 execution time 10ms.
+part 2 execution time 45746ms.
 ```
-
