@@ -1,12 +1,13 @@
 package com.sephiraandy.day2;
 
 import com.sephiraandy.util.Input;
+import com.sephiraandy.util.Puzzle;
 
 import java.io.IOException;
 
-public class Day2 {
+public class Day2 extends Puzzle<Integer> {
 
-    public static int solve1(String input) {
+    public Integer solve1(String input) {
         return Input.lineStream(input)
             .map(GameParser::parseGame)
             .filter(Game::isValid)
@@ -14,7 +15,7 @@ public class Day2 {
             .sum();
     }
 
-    public static int solve2(String input) {
+    public Integer solve2(String input) {
         return Input.lineStream(input)
             .map(GameParser::parseGame)
             .mapToInt(Game::powerOfMinimumSet)
@@ -22,8 +23,6 @@ public class Day2 {
     }
 
     public static void main(String[] args) throws IOException {
-        final var input = Input.loadTextFromFile("input/Day2");
-        System.out.println(solve1(input));
-        System.out.println(solve2(input));
+        new Day2().solve("input/Day2");
     }
 }

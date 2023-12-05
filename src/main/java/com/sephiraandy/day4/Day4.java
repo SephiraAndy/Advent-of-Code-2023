@@ -1,22 +1,21 @@
 package com.sephiraandy.day4;
 
 import com.sephiraandy.util.Input;
+import com.sephiraandy.util.Puzzle;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
-import static java.lang.System.out;
-
-public class Day4 {
-    public static int solve1(String input) {
+public class Day4 extends Puzzle<Integer> {
+    public Integer solve1(String input) {
         return Input.lineStream(input)
             .map(Card::parse)
             .mapToInt(Card::score)
             .sum();
     }
 
-    public static int solve2(String input) {
+    public Integer solve2(String input) {
         final var lines = Input.asLines(input);
         final var idsToQuantity = new HashMap<Integer, Integer>();
         var sum = 0;
@@ -39,8 +38,6 @@ public class Day4 {
     }
 
     public static void main(String[] args) throws IOException {
-        final var input = Input.loadTextFromFile("input/Day4");
-        out.println(solve1(input));
-        out.println(solve2(input));
+        new Day4().solve("input/Day4");
     }
 }

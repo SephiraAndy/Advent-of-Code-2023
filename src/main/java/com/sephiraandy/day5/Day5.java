@@ -1,13 +1,14 @@
 package com.sephiraandy.day5;
 
 import com.sephiraandy.util.Input;
+import com.sephiraandy.util.Puzzle;
 
 import java.io.IOException;
 
-import static com.sephiraandy.day5.SeedMap.*;
+import static com.sephiraandy.day5.SeedMap.fetchData;
 
-public class Day5 {
-    public static long solve1(final String input) {
+public class Day5 extends Puzzle<Long> {
+    public Long solve1(final String input) {
         final var lines = Input.asLines(input);
         return Seeds.parse(lines[0]).stream()
             .map(fetchData(lines, "seed-to-soil")::map)
@@ -21,7 +22,7 @@ public class Day5 {
             .orElse(0L);
     }
 
-    public static long solve2(final String input) {
+    public Long solve2(final String input) {
         final var lines = Input.asLines(input);
         return Seeds.parse(lines[0]).pairStream()
             .map(fetchData(lines, "seed-to-soil")::map)
@@ -36,8 +37,6 @@ public class Day5 {
     }
 
     public static void main(final String[] args) throws IOException {
-        final var input = Input.loadTextFromFile("input/Day5");
-        System.out.println(solve1(input));
-        System.out.println(solve2(input));
+        new Day5().solve("input/Day5");
     }
 }

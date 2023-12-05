@@ -67,7 +67,7 @@ record CalibrationLine(String line) {
     private boolean wordMatchesFromEnd(final int wordEndPosition,
                                        final String word) {
         var wordStartPosition = wordEndPosition + 1 - word.length();
-        return wordEndPosition >= 0 && (line.substring(wordStartPosition, wordEndPosition + 1).equals(word));
+        return wordStartPosition >= 0 && (line.substring(wordStartPosition, wordEndPosition + 1).equals(word));
     }
 
     IntStream positionStream() {
