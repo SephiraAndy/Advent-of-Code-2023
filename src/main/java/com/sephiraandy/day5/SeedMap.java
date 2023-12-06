@@ -1,8 +1,6 @@
 package com.sephiraandy.day5;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SeedMap {
     private final SeedMapData[] seedMapData;
@@ -39,58 +37,24 @@ public class SeedMap {
     }
 
     public List<SeedRange> map(final SeedRange input) {
-        final var unresolved = new ArrayDeque<SeedRange>();
-        unresolved.add(input);
+        final var unfiltered = new ArrayDeque<SeedRange>();
+        unfiltered.add(input);
         final var output = new ArrayList<SeedRange>();
 
-        while (!unresolved.isEmpty()) {
-            final var range = unresolved.remove();
-            if (filter(range, output, unresolved)) {
-                output.add(range);
-            }
+        while (!unfiltered.isEmpty()) {
+            final var range = unfiltered.remove();
+            Arrays.stream(seedMapData)
+                .map(smd -> smd.filter(range))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findAny()
+                .ifPresentOrElse(filterResult -> {
+                    unfiltered.addAll(filterResult.unfiltered());
+                    output.add(filterResult.output());
+                    },
+                    () -> output.add(range));
         }
 
         return output;
-    }
-
-    private boolean filter(SeedRange range, ArrayList<SeedRange> output, ArrayDeque<SeedRange> unresolved) {
-        var passed = true;
-        for (var seedMapData : seedMapData) {
-            passed = filter(seedMapData, range, output, unresolved, passed);
-            if (!passed) {
-                break;
-            }
-        }
-        return passed;
-    }
-
-    private static boolean filter(SeedMapData seedMapData, SeedRange range, ArrayList<SeedRange> output, ArrayDeque<SeedRange> unresolved, boolean passed) {
-        if (seedMapData.isInRange(range.start())) {
-            if (seedMapData.isInRange(range.last())) {
-                output.add(new SeedRange(seedMapData.map(range.start()), range.range()));
-                return false;
-            }
-
-            final var intersect = seedMapData.upper();
-            output.add(new SeedRange(seedMapData.map(range.start()), intersect - range.start()));
-            unresolved.add(new SeedRange(intersect, range.upper() - intersect));
-            return false;
-        }
-
-        if (seedMapData.isInRange(range.last())) {
-            output.add(new SeedRange(seedMapData.destinationRangeStart(), range.last() - seedMapData.sourceRangeStart()));
-            unresolved.add(new SeedRange(range.start(), seedMapData.sourceRangeStart() - range.start()));
-            return false;
-        }
-
-        if (!seedMapData.isUnderRange(range.last()) && seedMapData.isUnderRange(range.start())) {
-            final var intersect = seedMapData.upper();
-            output.add(new SeedRange(seedMapData.destinationRangeStart(), seedMapData.rangeLength()));
-            unresolved.add(new SeedRange(range.start(), seedMapData.sourceRangeStart() - range.start()));
-            unresolved.add(new SeedRange(intersect, range.upper() - intersect));
-            return false;
-        }
-
-        return passed;
     }
 }

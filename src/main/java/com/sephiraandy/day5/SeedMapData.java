@@ -1,5 +1,8 @@
 package com.sephiraandy.day5;
 
+import java.util.List;
+import java.util.Optional;
+
 public record SeedMapData(
     long destinationRangeStart,
     long sourceRangeStart,
@@ -23,5 +26,46 @@ public record SeedMapData(
 
     public boolean isUnderRange(long seed) {
         return seed < sourceRangeStart;
+    }
+
+    public SeedRange map(SeedRange range) {
+        return new SeedRange(map(range.start()), range.range());
+    }
+
+    public SeedRange destinationRange() {
+        return new SeedRange(destinationRangeStart, rangeLength);
+    }
+
+    public Optional<FilterResult> filter(final SeedRange range) {
+        if (isInRange(range.start())) {
+            if (isInRange(range.last())) {
+                return Optional.of(new FilterResult(map(range), List.of()));
+            }
+
+            final var intersect = upper();
+            return Optional.of(new FilterResult(
+                map(range.withRange(intersect - range.start())),
+                List.of(new SeedRange(intersect, range.upper() - intersect))));
+        }
+
+        if (isInRange(range.last())) {
+            return Optional.of(new FilterResult(
+                new SeedRange(destinationRangeStart(), range.last() - sourceRangeStart()),
+                List.of(new SeedRange(range.start(), sourceRangeStart() - range.start()))));
+        }
+
+        if (!isUnderRange(range.last()) && isUnderRange(range.start())) {
+            final var intersect = upper();
+            return Optional.of(new FilterResult(
+                destinationRange(),
+                List.of(
+                    range.withRange(sourceRangeStart() - range.start()),
+                    new SeedRange(intersect, range.upper() - intersect))));
+        }
+
+        return Optional.empty();
+    }
+
+    public record FilterResult(SeedRange output, List<SeedRange> unfiltered) {
     }
 }

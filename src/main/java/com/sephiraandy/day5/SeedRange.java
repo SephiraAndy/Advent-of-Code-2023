@@ -8,4 +8,8 @@ public record SeedRange(long start, long range) {
     public long upper() {
         return start + range;
     }
+
+    public SeedRange withRange(long range) {
+        return new SeedRange(start, range);
+    }
 }
