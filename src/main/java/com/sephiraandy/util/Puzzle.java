@@ -23,16 +23,16 @@ public abstract class Puzzle<T> {
             throw new RuntimeException(e);
         }
         var runTime = System.currentTimeMillis() - start;
-        runTimeLogConsumer.accept("input file load time " + (runTime == 0 ? "< 1" : runTime) + "ms.\n");
+        runTimeLogConsumer.accept("input file load time %sms.\n".formatted(runTime == 0 ? "< 1" : runTime));
 
         start = System.currentTimeMillis();
         solve1(input);
         runTime = System.currentTimeMillis() - start;
-        runTimeLogConsumer.accept("part 1 execution time " + (runTime == 0 ? "< 1" : runTime) + "ms.\n");
+        runTimeLogConsumer.accept("part 1 execution time %sms.\n".formatted(runTime == 0 ? "< 1" : runTime));
 
         start = System.currentTimeMillis();
         solve2(input);
         runTime = System.currentTimeMillis() - start;
-        runTimeLogConsumer.accept("part 2 execution time " + (runTime == 0 ? "< 1" : runTime) + "ms.\n");
+        runTimeLogConsumer.accept("part 2 execution time %sms.\n".formatted(runTime == 0 ? "< 1" : runTime));
     }
 }
