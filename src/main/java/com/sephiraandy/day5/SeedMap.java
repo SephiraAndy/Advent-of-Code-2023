@@ -45,61 +45,52 @@ public class SeedMap {
 
         while (!unresolved.isEmpty()) {
             final var range = unresolved.remove();
-            var passed = true;
-
-            for (var seedMapData : seedMapData) {
-                if (seedMapData.isInRange(range.start())) {
-                    if (seedMapData.isInRange(range.last())) {
-                        // 0000000000  (0, 10): mapData
-                        //     0000    (4, 4): range
-                        output.add(new SeedRange(seedMapData.map(range.start()), range.range()));
-                        passed = false;
-                        break;
-                    } else {
-                        // 0000000000      (0, 10): mapData
-                        //     0000000000  (4, 10): range
-                        final var intersect = seedMapData.upper();
-                        output.add(new SeedRange(seedMapData.map(range.start()), intersect - range.start()));
-                        unresolved.add(new SeedRange(intersect, range.upper() - intersect));
-                        passed = false;
-                        break;
-                    }
-                } else {
-                    if (seedMapData.isInRange(range.last())) {
-                        //      00000000000
-                        // 00000000000
-                        output.add(new SeedRange(seedMapData.destinationRangeStart(), range.last() - seedMapData.sourceRangeStart()));
-                        unresolved.add(new SeedRange(range.start(), seedMapData.sourceRangeStart() - range.start()));
-                        passed = false;
-                        break;
-                    } else {
-                        if (seedMapData.isUnderRange(range.last())) {
-                            //      0000000000
-                            // 000
-                        } else {
-                            if (seedMapData.isUnderRange(range.start())) {
-                                //      0000000000
-                                // 0000000000000000000
-                                final var intersect = seedMapData.upper();
-                                output.add(new SeedRange(seedMapData.destinationRangeStart(), seedMapData.rangeLength()));
-                                unresolved.add(new SeedRange(range.start(), seedMapData.sourceRangeStart() - range.start()));
-                                unresolved.add(new SeedRange(intersect, range.upper() - intersect));
-                                passed = false;
-                                break;
-                            } else {
-                                //      0000000000
-                                //                  00000
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (passed) {
+            if (filter(range, output, unresolved)) {
                 output.add(range);
             }
         }
 
         return output;
+    }
+
+    private boolean filter(SeedRange range, ArrayList<SeedRange> output, ArrayDeque<SeedRange> unresolved) {
+        var passed = true;
+        for (var seedMapData : seedMapData) {
+            passed = filter(seedMapData, range, output, unresolved, passed);
+            if (!passed) {
+                break;
+            }
+        }
+        return passed;
+    }
+
+    private static boolean filter(SeedMapData seedMapData, SeedRange range, ArrayList<SeedRange> output, ArrayDeque<SeedRange> unresolved, boolean passed) {
+        if (seedMapData.isInRange(range.start())) {
+            if (seedMapData.isInRange(range.last())) {
+                output.add(new SeedRange(seedMapData.map(range.start()), range.range()));
+                return false;
+            }
+
+            final var intersect = seedMapData.upper();
+            output.add(new SeedRange(seedMapData.map(range.start()), intersect - range.start()));
+            unresolved.add(new SeedRange(intersect, range.upper() - intersect));
+            return false;
+        }
+
+        if (seedMapData.isInRange(range.last())) {
+            output.add(new SeedRange(seedMapData.destinationRangeStart(), range.last() - seedMapData.sourceRangeStart()));
+            unresolved.add(new SeedRange(range.start(), seedMapData.sourceRangeStart() - range.start()));
+            return false;
+        }
+
+        if (!seedMapData.isUnderRange(range.last()) && seedMapData.isUnderRange(range.start())) {
+            final var intersect = seedMapData.upper();
+            output.add(new SeedRange(seedMapData.destinationRangeStart(), seedMapData.rangeLength()));
+            unresolved.add(new SeedRange(range.start(), seedMapData.sourceRangeStart() - range.start()));
+            unresolved.add(new SeedRange(intersect, range.upper() - intersect));
+            return false;
+        }
+
+        return passed;
     }
 }
