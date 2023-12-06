@@ -44,7 +44,7 @@ public class SeedMap {
         while (!unfiltered.isEmpty()) {
             final var range = unfiltered.remove();
             Arrays.stream(seedMapData)
-                .map(smd -> smd.filter(range))
+                .map(seedMapData -> seedMapData.filter(range))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findAny()
