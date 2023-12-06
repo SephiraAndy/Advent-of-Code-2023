@@ -3,7 +3,6 @@ package com.sephiraandy.day4;
 import com.sephiraandy.util.Input;
 import com.sephiraandy.util.Puzzle;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -40,9 +39,5 @@ public class Day4 extends Puzzle<Integer> {
         }
 
         return sum;
-    }
-
-    public static void main(String[] args) {
-        new Day4(System.out::print).solve("input/Day4");
     }
 }

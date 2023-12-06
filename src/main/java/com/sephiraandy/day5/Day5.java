@@ -40,8 +40,4 @@ public class Day5 extends Puzzle<Long> {
             .map(fetchData(lines, "humidity-to-location")::map).flatMap(List::stream)
             .mapToLong(SeedRange::start).min().orElse(0L);
     }
-
-    public static void main(final String[] args) {
-        new Day5(System.out::print).solve("input/Day5");
-    }
 }

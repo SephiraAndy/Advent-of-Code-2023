@@ -26,8 +26,4 @@ public class Day2 extends Puzzle<Integer> {
             .mapToInt(Game::powerOfMinimumSet)
             .sum();
     }
-
-    public static void main(String[] args) {
-        new Day2(System.out::print).solve("input/Day2");
-    }
 }

@@ -2,7 +2,6 @@ package com.sephiraandy.day3;
 
 import com.sephiraandy.util.Puzzle;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public class Day3 extends Puzzle<Integer> {
@@ -23,9 +22,5 @@ public class Day3 extends Puzzle<Integer> {
             .stream()
             .mapToInt(Gear::ratio)
             .sum();
-    }
-
-    public static void main(final String[] args) {
-        new Day3(System.out::print).solve("input/Day3");
     }
 }

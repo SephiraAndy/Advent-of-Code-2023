@@ -20,8 +20,4 @@ public class Day6 extends Puzzle<Long> {
     public Long solve2(final String input) {
         return Race.parseRace(input).numberOfWaysToBeat();
     }
-
-    public static void main(final String[] args) {
-        new Day6(System.out::print).solve("input/Day6");
-    }
 }

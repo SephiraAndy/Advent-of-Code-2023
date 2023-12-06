@@ -26,12 +26,12 @@ public abstract class Puzzle<T> {
         runTimeLogConsumer.accept("input file load time " + (end - start) + "ms.\n");
 
         start = System.currentTimeMillis();
-        System.out.println(solve1(input).toString());
+        solve1(input);
         end = System.currentTimeMillis();
         runTimeLogConsumer.accept("part 1 execution time " + (end - start) + "ms.\n");
 
         start = System.currentTimeMillis();
-        System.out.println(solve2(input).toString());
+        solve2(input);
         end = System.currentTimeMillis();
         runTimeLogConsumer.accept("part 2 execution time " + (end - start) + "ms.\n");
     }

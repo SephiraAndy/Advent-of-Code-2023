@@ -1,7 +1,10 @@
 package com.sephiraandy;
 
 import com.sephiraandy.day4.Day4;
+import com.sephiraandy.util.Input;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +24,17 @@ public class Day4Test {
     }
 
     @Test
+    void part1Real() throws IOException {
+        assertThat(new Day4(s -> {}).solve1(Input.loadTextFromFile("input/Day4"))).isEqualTo(21821);
+    }
+
+    @Test
     void part2() {
         assertThat(new Day4(s -> {}).solve2(INPUT)).isEqualTo(30);
+    }
+
+    @Test
+    void part2Real() throws IOException {
+        assertThat(new Day4(s -> {}).solve2(Input.loadTextFromFile("input/Day4"))).isEqualTo(5539496);
     }
 }

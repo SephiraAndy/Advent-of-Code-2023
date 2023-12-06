@@ -26,9 +26,4 @@ public class Day1 extends Puzzle<Integer> {
             .mapToInt(c -> c.readValue(c::numberForward, c::numberBackward))
             .sum();
     }
-
-    public static void main(String[] args) {
-        new Day1(System.out::print).solve("input/Day1");
-    }
-
 }

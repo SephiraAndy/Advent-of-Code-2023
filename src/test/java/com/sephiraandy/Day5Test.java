@@ -3,6 +3,9 @@ package com.sephiraandy;
 import com.sephiraandy.day5.Day5;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
+import static com.sephiraandy.util.Input.loadTextFromFile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day5Test {
@@ -44,11 +47,21 @@ public class Day5Test {
 
     @Test
     void part1() {
-        assertThat(new Day5(s -> {}).solve1(INPUT)).isEqualTo(35);
+        assertThat(new Day5(s -> {}).solve1(INPUT)).isEqualTo(35L);
+    }
+
+    @Test
+    void part1Real() throws IOException {
+        assertThat(new Day5(s -> {}).solve1(loadTextFromFile("input/Day5"))).isEqualTo(382895070L);
     }
 
     @Test
     void part2() {
-        assertThat(new Day5(s -> {}).solve2(INPUT)).isEqualTo(46);
+        assertThat(new Day5(s -> {}).solve2(INPUT)).isEqualTo(46L);
+    }
+
+    @Test
+    void part2Real() throws IOException {
+        assertThat(new Day5(s -> {}).solve2(loadTextFromFile("input/Day5"))).isEqualTo(17729182L);
     }
 }
