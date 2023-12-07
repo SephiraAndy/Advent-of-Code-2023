@@ -1,6 +1,5 @@
-package com.sephiraandy;
+package com.sephiraandy.day4;
 
-import com.sephiraandy.day4.Day4;
 import com.sephiraandy.util.Input;
 import org.junit.jupiter.api.Test;
 

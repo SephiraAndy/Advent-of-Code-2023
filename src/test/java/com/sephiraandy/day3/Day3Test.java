@@ -1,6 +1,5 @@
-package com.sephiraandy;
+package com.sephiraandy.day3;
 
-import com.sephiraandy.day3.Day3;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

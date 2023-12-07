@@ -1,6 +1,5 @@
-package com.sephiraandy;
+package com.sephiraandy.day6;
 
-import com.sephiraandy.day6.Day6;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
