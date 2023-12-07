@@ -8,7 +8,6 @@ import com.sephiraandy.day5.Day5;
 import com.sephiraandy.day6.Day6;
 import com.sephiraandy.day7.Day7;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -32,7 +31,7 @@ public class PuzzleRunner {
     }
 
     private static void log(StringBuilder reportBuilder, int day, Consumer<String> puzzle) {
-        reportBuilder.append("\n## Day ").append(day).append("\n\n```\n");
+        reportBuilder.append("\n### Day ").append(day).append("\n\n```\n");
         puzzle.accept("input/Day" + day);
         reportBuilder.append("```\n");
     }
