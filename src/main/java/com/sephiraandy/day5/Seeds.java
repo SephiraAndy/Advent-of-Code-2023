@@ -28,19 +28,6 @@ public class Seeds {
         return seedList.stream().mapToLong(Long::longValue);
     }
 
-    public LongStream pairStream() {
-
-        var stream = LongStream.empty();
-
-        for (var seedPairStart = 0; seedPairStart < seedList.size(); seedPairStart += 2) {
-            final var start = seedList.get(seedPairStart);
-            final var range = seedList.get(seedPairStart + 1);
-            stream = LongStream.concat(stream, LongStream.range(start, start + range));
-        }
-
-        return stream.parallel();
-    }
-
     public Stream<SeedRange> rangeStream() {
         final var ranges = new ArrayList<SeedRange>();
         for (var seedRangeStart = 0; seedRangeStart < seedList.size(); seedRangeStart += 2) {

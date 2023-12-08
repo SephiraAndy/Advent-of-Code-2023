@@ -34,15 +34,14 @@ class EngineSchematic {
 
         final var line = schematic[lineNumber];
         for (int position = 0; position < line.length(); ++position) {
-            if (!line.isDigitAt(position)) {
-                continue;
+            if (line.isDigitAt(position)) {
+                var numberString = line.extractNumberStringStartingAt(position);
+                if (isEnginePartNumber(numberString, position, lineNumber)) {
+                    partNumbers.add(Integer.parseInt(numberString));
+                }
+                position += numberString.length() - 1;
             }
 
-            var numberString = line.extractNumberStringStartingAt(position);
-            if (isEnginePartNumber(numberString, position, lineNumber)) {
-                partNumbers.add(Integer.parseInt(numberString));
-            }
-            position += numberString.length() - 1;
         }
         return partNumbers;
     }
@@ -90,19 +89,17 @@ class EngineSchematic {
         for (var line = lineFrom; line <= lineTo; ++line) {
             final var schematicLine = schematic[line];
             for (var position = positionFrom; position <= positionTo; ++position) {
-                if (!schematicLine.isDigitAt(position)) {
-                    continue;
+                if (schematicLine.isDigitAt(position)) {
+                    if (partNumbers.size() == 2) {
+                        return Optional.empty();
+                    }
+
+                    final var partNumberStart = schematicLine.getStartPositionOfPartNumberContaining(position);
+                    final var partNumberString = schematicLine.extractNumberStringStartingAt(partNumberStart);
+
+                    partNumbers.add(partNumberString);
+                    position = partNumberStart + partNumberString.length() - 1;
                 }
-
-                if (partNumbers.size() == 2) {
-                    return Optional.empty();
-                }
-
-                final var partNumberStart = schematicLine.getStartPositionOfPartNumberContaining(position);
-                final var partNumberString = schematicLine.extractNumberStringStartingAt(partNumberStart);
-
-                partNumbers.add(partNumberString);
-                position = partNumberStart + partNumberString.length() - 1;
             }
         }
 

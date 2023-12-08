@@ -7,6 +7,7 @@ import com.sephiraandy.day4.Day4;
 import com.sephiraandy.day5.Day5;
 import com.sephiraandy.day6.Day6;
 import com.sephiraandy.day7.Day7;
+import com.sephiraandy.day8.Day8;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,7 +15,6 @@ import java.util.function.Consumer;
 
 public class PuzzleRunner {
     public static void main(String[] args) throws IOException {
-
         final var reportBuilder = new StringBuilder("# Run Times\n");
 
         log(reportBuilder, 1, new Day1(reportBuilder::append)::solve);
@@ -24,6 +24,7 @@ public class PuzzleRunner {
         log(reportBuilder, 5, new Day5(reportBuilder::append)::solve);
         log(reportBuilder, 6, new Day6(reportBuilder::append)::solve);
         log(reportBuilder, 7, new Day7(reportBuilder::append)::solve);
+        log(reportBuilder, 8, new Day8(reportBuilder::append)::solve);
 
         try (final var fileWriter = new FileWriter("RunTimes.md")) {
             fileWriter.write(reportBuilder.toString());
