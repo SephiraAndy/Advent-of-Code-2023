@@ -32,8 +32,8 @@ public class DesertMap {
         return new DesertMap(instructions, map);
     }
 
-    public long traverse(final Predicate<String[]> isComplete,
-                         final String[] currentNodes) {
+    public long traverse(final String[] currentNodes,
+                         final Predicate<String> complete) {
 
         final var intervals = new Long[currentNodes.length];
         for (var i = 0; i < currentNodes.length; ++i) {
@@ -41,14 +41,12 @@ public class DesertMap {
         }
 
         var steps = 0L;
-        while (!isComplete.test(currentNodes)) {
+        while (!Arrays.stream(currentNodes).allMatch(complete)) {
             final var instruction = instructions.charAt((int) (steps % instructionCount));
             for (var ghost = 0; ghost < currentNodes.length; ++ghost) {
                 currentNodes[ghost] = map.get(currentNodes[ghost]).next(instruction);
 
-                if (currentNodes.length == 1) continue;
-
-                if (currentNodes[ghost].endsWith("Z") && intervals[ghost] == 0L) {
+                if (complete.test(currentNodes[ghost]) && intervals[ghost] == 0L) {
                     intervals[ghost] = steps + 1 - intervals[ghost];
                 }
             }
@@ -59,15 +57,10 @@ public class DesertMap {
             }
         }
 
-        if (currentNodes.length == 1) {
-            return steps;
-        }
-
         for (var i = 1; i < intervals.length; ++i) {
             var a = intervals[i - 1];
             var b = intervals[i];
-            var hcf = highestCommonFactor(a, b);
-            intervals[i] = a * b / hcf;
+            intervals[i] = a * b / highestCommonFactor(a, b);
         }
 
         return intervals[intervals.length - 1];
