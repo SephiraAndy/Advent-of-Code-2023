@@ -1,7 +1,8 @@
 package com.sephiraandy.day9;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 public class Sequence {
     private final int[] data;
@@ -20,19 +21,28 @@ public class Sequence {
     }
 
     public int getNext() {
-        return isDataRepeating(data[0])
-            ? data[0]
-            : data[data.length - 1] + differenceLayer(data).getNext();
+        return continueSequence(this::next);
+    }
+
+    private int next() {
+        return data[data.length - 1] + differenceLayer().getNext();
     }
 
     public int getPrevious() {
-        return isDataRepeating(data[0])
-            ? data[0]
-            : data[0] - differenceLayer(data).getPrevious();
+        return continueSequence(this::previous);
     }
 
-    @Contract(pure = true)
-    private @NotNull Sequence differenceLayer(final int @NotNull [] data) {
+    private int previous() {
+        return data[0] - differenceLayer().getPrevious();
+    }
+
+    private int continueSequence(Supplier<Integer> previous) {
+        return isDataRepeating()
+            ? data[0]
+            : previous.get();
+    }
+
+    private @NotNull Sequence differenceLayer() {
         final var nextLayer = new int[data.length - 1];
         for (int i = 1; i < data.length; ++ i) {
             nextLayer[i - 1] = data[i] - data[i - 1];
@@ -40,15 +50,13 @@ public class Sequence {
         return new Sequence(nextLayer);
     }
 
-    @Contract(pure = true)
-    private boolean isDataRepeating(final int contents) {
-        var dataRepeats = true;
+    private boolean isDataRepeating() {
+        final int contents = data[0];
         for (var index = 1; index < data.length; ++index) {
             if (data[index] != contents) {
-                dataRepeats = false;
-                break;
+                return false;
             }
         }
-        return dataRepeats;
+        return true;
     }
 }
