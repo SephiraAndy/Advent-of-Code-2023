@@ -98,7 +98,6 @@ public class Hand {
             }
 
             if (entry.getValue() + jokers == 2) {
-                jokers -= (2 - entry.getValue());
                 return true;
             }
         }

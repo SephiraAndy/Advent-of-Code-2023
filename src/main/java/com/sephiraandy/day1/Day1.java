@@ -2,7 +2,6 @@ package com.sephiraandy.day1;
 
 import com.sephiraandy.util.Puzzle;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 import static com.sephiraandy.util.Input.lineStream;

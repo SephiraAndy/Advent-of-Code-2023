@@ -1,6 +1,8 @@
 package com.sephiraandy.day9;
 
 import com.sephiraandy.util.Puzzle;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -24,7 +26,7 @@ public class Day9 extends Puzzle<Integer> {
             .sum();
     }
 
-    private static int[] parseLine(String line) {
+    private static int @NotNull [] parseLine(final @NotNull String line) {
         final var raw = line.split(" ");
         final var data = new int[raw.length];
         for (var index = 0; index < raw.length; ++index) {
@@ -34,30 +36,29 @@ public class Day9 extends Puzzle<Integer> {
     }
 
     private static int getNext(final int[] data) {
-        final var contents = data[0];
-        if (isDataRepeating(data, contents)) return contents;
+        return isDataRepeating(data, data[0])
+            ? data[0]
+            : data[data.length - 1] + getNext(differenceLayer(data));
+    }
 
+    private static int getPrevious(final int[] data) {
+        return isDataRepeating(data, data[0])
+            ? data[0]
+            : data[0] - getPrevious(differenceLayer(data));
+    }
+
+    @Contract(pure = true)
+    private static int @NotNull [] differenceLayer(final int @NotNull [] data) {
         final var nextLayer = new int[data.length - 1];
         for (int i = 1; i < data.length; ++ i) {
             nextLayer[i - 1] = data[i] - data[i - 1];
         }
-
-        return data[data.length - 1] + getNext(nextLayer);
+        return nextLayer;
     }
 
-    private static int getPrevious(int[] data) {
-        final var contents = data[0];
-        if (isDataRepeating(data, contents)) return contents;
-
-        final var nextLayer = new int[data.length - 1];
-        for (int i = 1; i < data.length; ++ i) {
-            nextLayer[i - 1] = data[i] - data[i - 1];
-        }
-
-        return data[0] - getPrevious(nextLayer);
-    }
-
-    private static boolean isDataRepeating(int[] data, int contents) {
+    @Contract(pure = true)
+    private static boolean isDataRepeating(final int @NotNull [] data,
+                                           final int contents) {
         var dataRepeats = true;
         for (var index = 1; index < data.length; ++index) {
             if (data[index] != contents) {

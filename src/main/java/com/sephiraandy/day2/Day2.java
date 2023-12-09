@@ -3,7 +3,6 @@ package com.sephiraandy.day2;
 import com.sephiraandy.util.Input;
 import com.sephiraandy.util.Puzzle;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public class Day2 extends Puzzle<Integer> {
