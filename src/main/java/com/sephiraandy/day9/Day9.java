@@ -7,6 +7,9 @@ import java.util.function.Consumer;
 import static com.sephiraandy.util.Input.lineStream;
 
 public class Day9 extends Puzzle<Integer> {
+
+    public static final String INPUT_PATH = "input/Day9";
+
     public Day9() {
         this(s -> {
         });

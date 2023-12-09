@@ -1,11 +1,12 @@
 package com.sephiraandy.day9;
 
-import com.sephiraandy.util.Input;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static com.sephiraandy.day9.Day9.INPUT_PATH;
+import static com.sephiraandy.util.Input.loadTextFromFile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class Day9Test {
@@ -29,7 +30,7 @@ class Day9Test {
 
     @Test
     void part1Real() throws IOException {
-        final var input = Input.loadTextFromFile("input/Day9");
+        final var input = loadTextFromFile(INPUT_PATH);
         final var solution = day9.solve1(input);
         assertThat(solution).isEqualTo(1868368343);
     }
@@ -42,7 +43,7 @@ class Day9Test {
 
     @Test
     void part2Real() throws IOException {
-        final var input = Input.loadTextFromFile("input/Day9");
+        final var input = loadTextFromFile(INPUT_PATH);
         final var solution = day9.solve2(input);
         assertThat(solution).isEqualTo(1022);
     }
