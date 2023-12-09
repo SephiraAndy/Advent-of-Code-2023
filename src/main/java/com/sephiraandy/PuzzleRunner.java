@@ -8,6 +8,7 @@ import com.sephiraandy.day5.Day5;
 import com.sephiraandy.day6.Day6;
 import com.sephiraandy.day7.Day7;
 import com.sephiraandy.day8.Day8;
+import com.sephiraandy.day9.Day9;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class PuzzleRunner {
         log(reportBuilder, 6, new Day6(reportBuilder::append)::solve);
         log(reportBuilder, 7, new Day7(reportBuilder::append)::solve);
         log(reportBuilder, 8, new Day8(reportBuilder::append)::solve);
+        log(reportBuilder, 9, new Day9(reportBuilder::append)::solve);
 
         try (final var fileWriter = new FileWriter("RunTimes.md")) {
             fileWriter.write(reportBuilder.toString());
