@@ -35,6 +35,29 @@ public class Day9 extends Puzzle<Integer> {
 
     private static int getNext(final int[] data) {
         final var contents = data[0];
+        if (isDataRepeating(data, contents)) return contents;
+
+        final var nextLayer = new int[data.length - 1];
+        for (int i = 1; i < data.length; ++ i) {
+            nextLayer[i - 1] = data[i] - data[i - 1];
+        }
+
+        return data[data.length - 1] + getNext(nextLayer);
+    }
+
+    private static int getPrevious(int[] data) {
+        final var contents = data[0];
+        if (isDataRepeating(data, contents)) return contents;
+
+        final var nextLayer = new int[data.length - 1];
+        for (int i = 1; i < data.length; ++ i) {
+            nextLayer[i - 1] = data[i] - data[i - 1];
+        }
+
+        return data[0] - getPrevious(nextLayer);
+    }
+
+    private static boolean isDataRepeating(int[] data, int contents) {
         var dataRepeats = true;
         for (var index = 1; index < data.length; ++index) {
             if (data[index] != contents) {
@@ -42,14 +65,7 @@ public class Day9 extends Puzzle<Integer> {
                 break;
             }
         }
-        if (dataRepeats) return contents;
-
-        final var nextLayer = new int[data.length - 1];
-        for (int i = 1; i < data.length; ++ i) {
-            nextLayer[i - 1] = data[i] - data[i - 1];
-        }
-
-        return getNext(nextLayer) + data[data.length - 1];
+        return dataRepeats;
     }
 
     @Override
@@ -58,24 +74,5 @@ public class Day9 extends Puzzle<Integer> {
             .map(Day9::parseLine)
             .mapToInt(Day9::getPrevious)
             .sum();
-    }
-
-    private static int getPrevious(int[] data) {
-        final var contents = data[0];
-        var dataRepeats = true;
-        for (var index = 1; index < data.length; ++index) {
-            if (data[index] != contents) {
-                dataRepeats = false;
-                break;
-            }
-        }
-        if (dataRepeats) return contents;
-
-        final var nextLayer = new int[data.length - 1];
-        for (int i = 1; i < data.length; ++ i) {
-            nextLayer[i - 1] = data[i] - data[i - 1];
-        }
-
-        return data[0] - getPrevious(nextLayer);
     }
 }
