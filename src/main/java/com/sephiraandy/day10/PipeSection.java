@@ -46,7 +46,6 @@ public class PipeSection implements PipeMapTile {
         if (entry1 == DOWN && exit1 == RIGHT) return false;
         if (entry1 == RIGHT && exit1 == DOWN) return false;
         if (entry1 == LEFT && exit1 == UP) return false;
-        if (entry1 == UP && exit1 == LEFT) return false;
-        return true;
+        return entry1 != UP || exit1 != LEFT;
     }
 }

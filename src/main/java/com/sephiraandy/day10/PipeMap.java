@@ -8,7 +8,6 @@ import static com.sephiraandy.util.Input.asLines;
 public class PipeMap {
     private static final int DYNAMIC_PATH = 1;
     private static final int DYNAMIC_EMPTY = 0;
-    private static final int DYNAMIC_OUTSIDE = 2;
     private final PipeMapTile[][] map;
     private final GridVector start;
 
@@ -33,6 +32,10 @@ public class PipeMap {
             }
         }
 
+        if (start == null) {
+            throw new RuntimeException("Cannot find the starting position. S");
+        }
+
         return new PipeMap(start, map);
     }
 
@@ -52,9 +55,9 @@ public class PipeMap {
             final var dynamicMap = new int[map.length][map[0].length];
             dynamicMap[start.y()][start.x()] = DYNAMIC_PATH;
 
-            while (!validMove.isInvalid()) {
+            while (!validMove.invalid()) {
                 ++pathLength;
-                if (validMove.isComplete()) {
+                if (validMove.complete()) {
                     map[start.y()][start.x()] = createMapTile(validMove.direction(), initialDirection);
                     return new LoopResult(pathLength, calculateArea(dynamicMap));
                 }
@@ -106,7 +109,7 @@ public class PipeMap {
     private boolean handleInOut(final @NotNull PipeMapTile start,
                                 final @NotNull PipeMapTile end,
                                 final boolean isOutside) {
-        return (start.polarity() == end.polarity()) ? !isOutside : isOutside;
+        return (start.polarity() == end.polarity()) != isOutside;
     }
 
     private @NotNull PipeMapTile createMapTile(final @NotNull GridVector entry,
