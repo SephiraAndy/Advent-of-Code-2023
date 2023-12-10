@@ -19,19 +19,14 @@ class AreaMeasurer {
         dynamicMap = new int[pipeMap.height()][pipeMap.width()];
     }
 
-    public int area() {
-        return area;
-    }
-
     public void init(final @NotNull GridVector initialDirection) {
         this.initialDirection = initialDirection;
         final var start = pipeMap.start();
         dynamicMap[start.y()][start.x()] = DYNAMIC_PATH;
     }
 
-    public void onComplete(final @NotNull MoveResult result) {
+    public int onComplete(final @NotNull MoveResult result) {
         final var startTile = createMapTile(result.direction(), initialDirection);
-        area = 0;
         for (var y = 0; y < dynamicMap.length; ++y) {
             PipeMapTile cornerStart = null;
             var isOutside = true;
@@ -67,6 +62,7 @@ class AreaMeasurer {
                 cornerStart = null;
             }
         }
+        return area;
     }
 
     public void postUpdate(final @NotNull GridVector position) {

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.sephiraandy.day10.GridVector.*;
 import static com.sephiraandy.day10.PipeMapTile.createMapTile;
@@ -53,33 +54,31 @@ public class PipeMap {
 
     public int enclosedArea() {
         final var areaMeasurer = new AreaMeasurer(this);
-        evaluate(areaMeasurer::init, () -> {}, areaMeasurer::postUpdate, areaMeasurer::onComplete);
-        return areaMeasurer.area();
+        return evaluate(areaMeasurer::init, () -> {}, areaMeasurer::postUpdate, areaMeasurer::onComplete);
     }
 
     public int perimeter() {
         final var perimeterMeasurer = new PerimeterMeasurer();
-        evaluate(perimeterMeasurer::init, perimeterMeasurer::preUpdate, r -> {}, r -> {});
-        return perimeterMeasurer.perimeter();
+        return evaluate(perimeterMeasurer::init, perimeterMeasurer::preUpdate, r -> {}, perimeterMeasurer::onComplete);
     }
 
-    public void evaluate(final @NotNull Consumer<GridVector> init,
+    public int evaluate(final @NotNull Consumer<GridVector> init,
                          final @NotNull Runnable preUpdate,
                          final @NotNull Consumer<GridVector> postUpdate,
-                         final @NotNull Consumer<MoveResult> onComplete) {
+                         final @NotNull Function<MoveResult, Integer> onComplete) {
         for (var initialDirection : INITIAL_DIRECTIONS) {
             var validMove = move(new Move(start, start.translate(initialDirection)));
             init.accept(initialDirection);
             while (!validMove.invalid()) {
                 preUpdate.run();
                 if (validMove.complete()) {
-                    onComplete.accept(validMove);
-                    return;
+                    return onComplete.apply(validMove);
                 }
                 postUpdate.accept(validMove.next().position());
                 validMove = move(validMove.next());
             }
         }
+        return 0;
     }
 
     private @NotNull MoveResult move(final @NotNull Move move) {

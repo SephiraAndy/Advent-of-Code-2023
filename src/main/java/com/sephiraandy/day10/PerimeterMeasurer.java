@@ -1,5 +1,7 @@
 package com.sephiraandy.day10;
 
+import org.jetbrains.annotations.NotNull;
+
 class PerimeterMeasurer {
     private int perimeter;
 
@@ -11,7 +13,7 @@ class PerimeterMeasurer {
         ++perimeter;
     }
 
-    public int perimeter() {
+    public int onComplete(final @NotNull MoveResult ignored) {
         return perimeter;
     }
 }
