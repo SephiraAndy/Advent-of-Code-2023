@@ -54,18 +54,20 @@ public class PipeMap {
 
     public int enclosedArea() {
         final var areaMeasurer = new AreaMeasurer(this);
-        return evaluate(areaMeasurer::init, () -> {}, areaMeasurer::postUpdate, areaMeasurer::onComplete);
+        return evaluate(areaMeasurer::init, () -> {
+        }, areaMeasurer::postUpdate, areaMeasurer::onComplete);
     }
 
     public int perimeter() {
         final var perimeterMeasurer = new PerimeterMeasurer();
-        return evaluate(perimeterMeasurer::init, perimeterMeasurer::preUpdate, r -> {}, perimeterMeasurer::onComplete);
+        return evaluate(perimeterMeasurer::init, perimeterMeasurer::preUpdate, r -> {
+        }, perimeterMeasurer::onComplete);
     }
 
     public int evaluate(final @NotNull Consumer<GridVector> init,
-                         final @NotNull Runnable preUpdate,
-                         final @NotNull Consumer<GridVector> postUpdate,
-                         final @NotNull Function<MoveResult, Integer> onComplete) {
+                        final @NotNull Runnable preUpdate,
+                        final @NotNull Consumer<GridVector> postUpdate,
+                        final @NotNull Function<MoveResult, Integer> onComplete) {
         for (var initialDirection : INITIAL_DIRECTIONS) {
             var validMove = move(new Move(start, start.translate(initialDirection)));
             init.accept(initialDirection);
