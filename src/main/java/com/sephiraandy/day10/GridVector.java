@@ -11,4 +11,8 @@ public record GridVector(int x, int y) {
     public @NotNull GridVector translate(final @NotNull GridVector delta) {
         return new GridVector(x + delta.x, y + delta.y);
     }
+
+    public boolean isOutOfBounds(int width, int height) {
+        return x < 0 || y < 0 || x >= width || y >= height;
+    }
 }

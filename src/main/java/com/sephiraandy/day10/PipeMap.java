@@ -3,13 +3,19 @@ package com.sephiraandy.day10;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.sephiraandy.day10.GridVector.*;
+import static com.sephiraandy.day10.PipeMapTile.createMapTile;
 import static com.sephiraandy.util.Input.asLines;
 
 public class PipeMap {
-    private static final int DYNAMIC_PATH = 1;
-    private static final int DYNAMIC_EMPTY = 0;
+    public static final GridVector[] INITIAL_DIRECTIONS = new GridVector[]{
+        RIGHT,
+        DOWN,
+        LEFT,
+        UP
+    };
     private final @NotNull PipeMapTile[][] map;
     private final @NotNull GridVector start;
 
@@ -41,150 +47,67 @@ public class PipeMap {
         return Optional.of(new PipeMap(start, map));
     }
 
+    public @NotNull GridVector start() {
+        return start;
+    }
+
     public int enclosedArea() {
-        var initialDirections = new GridVector[]{
-            RIGHT,
-            DOWN,
-            LEFT,
-            UP
-        };
-
-        for (var initialDirection : initialDirections) {
-            var validMove = move(new Move(start, start.translate(initialDirection)));
-
-            final var dynamicMap = new int[map.length][map[0].length];
-            dynamicMap[start.y()][start.x()] = DYNAMIC_PATH;
-
-            while (!validMove.invalid()) {
-                if (validMove.complete()) {
-                    map[start.y()][start.x()] = createMapTile(validMove.direction(), initialDirection);
-                    return calculateArea(dynamicMap);
-                }
-                dynamicMap[validMove.next().position().y()][validMove.next().position().x()] = DYNAMIC_PATH;
-                validMove = move(validMove.next());
-            }
-        }
-
-        return 0;
+        final var areaMeasurer = new AreaMeasurer(this);
+        evaluate(areaMeasurer::init, () -> {}, areaMeasurer::postUpdate, areaMeasurer::onComplete);
+        return areaMeasurer.area();
     }
 
     public int perimeter() {
+        final var perimeterMeasurer = new PerimeterMeasurer();
+        evaluate(perimeterMeasurer::init, perimeterMeasurer::preUpdate, r -> {}, r -> {});
+        return perimeterMeasurer.perimeter();
+    }
 
-        var initialDirections = new GridVector[]{
-            RIGHT,
-            DOWN,
-            LEFT,
-            UP
-        };
-
-        for (var initialDirection : initialDirections) {
+    public void evaluate(final @NotNull Consumer<GridVector> init,
+                         final @NotNull Runnable preUpdate,
+                         final @NotNull Consumer<GridVector> postUpdate,
+                         final @NotNull Consumer<MoveResult> onComplete) {
+        for (var initialDirection : INITIAL_DIRECTIONS) {
             var validMove = move(new Move(start, start.translate(initialDirection)));
-            var pathLength = 0;
-
+            init.accept(initialDirection);
             while (!validMove.invalid()) {
-                ++pathLength;
+                preUpdate.run();
                 if (validMove.complete()) {
-                    map[start.y()][start.x()] = createMapTile(validMove.direction(), initialDirection);
-                    return pathLength;
+                    onComplete.accept(validMove);
+                    return;
                 }
+                postUpdate.accept(validMove.next().position());
                 validMove = move(validMove.next());
             }
         }
-
-        return 0;
-    }
-
-    private int calculateArea(final int @NotNull[] @NotNull[] dynamicMap) {
-        var count = 0;
-        for (var rowIndex = 0; rowIndex < dynamicMap.length; ++rowIndex) {
-            PipeMapTile cornerStart = null;
-            var isOutside = true;
-            final var rowLength = dynamicMap[rowIndex].length;
-            for (var columnIndex = 0; columnIndex < rowLength; ++columnIndex) {
-                if (dynamicMap[rowIndex][columnIndex] == DYNAMIC_EMPTY) {
-                    if (!isOutside) {
-                        ++count;
-                    }
-                    continue;
-                }
-
-                final var pipeMapTile = map[rowIndex][columnIndex];
-                if (pipeMapTile.isHorizontal()) {
-                    continue;
-                }
-
-                if (pipeMapTile.isVertical()) {
-                    isOutside = !isOutside;
-                    continue;
-                }
-
-                if (cornerStart == null) {
-                    cornerStart = pipeMapTile;
-                    continue;
-                }
-
-                isOutside = handleInOut(cornerStart, pipeMapTile, isOutside);
-                cornerStart = null;
-            }
-
-        }
-        return count;
-    }
-
-    private boolean handleInOut(final @NotNull PipeMapTile start,
-                                final @NotNull PipeMapTile end,
-                                final boolean isOutside) {
-        return (start.polarity() == end.polarity()) != isOutside;
-    }
-
-    private @NotNull PipeMapTile createMapTile(final @NotNull GridVector entry,
-                                               final @NotNull GridVector exit) {
-        if (entry.equals(RIGHT)) {
-            if (exit.equals(RIGHT)) return createMapTile('-');
-            if (exit.equals(UP)) return createMapTile('J');
-            if (exit.equals(DOWN)) return createMapTile('7');
-        } else if (entry.equals(DOWN)) {
-            if (exit.equals(DOWN)) return createMapTile('|');
-            if (exit.equals(RIGHT)) return createMapTile('L');
-            if (exit.equals(LEFT)) return createMapTile('J');
-        } else if (entry.equals(LEFT)) {
-            if (exit.equals(LEFT)) return createMapTile('-');
-            if (exit.equals(UP)) return createMapTile('L');
-            if (exit.equals(DOWN)) return createMapTile('F');
-        } else if (entry.equals(UP)) {
-            if (exit.equals(UP)) return createMapTile('|');
-            if (exit.equals(RIGHT)) return createMapTile('F');
-            if (exit.equals(LEFT)) return createMapTile('7');
-        }
-
-        throw new RuntimeException("Cannot exit and leave the same side.");
     }
 
     private @NotNull MoveResult move(final @NotNull Move move) {
         final var next = move.next();
-        if (next.x() < 0 || next.y() < 0 || next.x() >= map[0].length || next.y() >= map.length) {
-            return MoveResult.invalidMove();
-        }
-        final var delta = move.delta();
-        return getTileAt(next).move(delta, next);
-    }
 
-    private static @NotNull PipeMapTile createMapTile(final @NotNull Character rawValue) {
-        return switch (rawValue) {
-            case '-' -> new PipeSection(RIGHT, RIGHT, LEFT, LEFT);
-            case '7' -> new PipeSection(RIGHT, DOWN, UP, LEFT);
-            case '|' -> new PipeSection(UP, UP, DOWN, DOWN);
-            case 'L' -> new PipeSection(DOWN, RIGHT, LEFT, UP);
-            case 'J' -> new PipeSection(RIGHT, UP, DOWN, LEFT);
-            case 'F' -> new PipeSection(UP, RIGHT, LEFT, DOWN);
-            case 'S' -> new StartTile();
-            case '.' -> new GroundTile();
-            default -> throw new RuntimeException("Unknown tile raw value " + rawValue);
-        };
+        return next.isOutOfBounds(width(), height())
+            ? MoveResult.invalidMove()
+            : getTileAt(next).move(move.delta(), next);
     }
 
     private @NotNull PipeMapTile getTileAt(final @NotNull GridVector position) {
         return map[position.y()][position.x()];
     }
 
+    public int height() {
+        return map.length;
+    }
+
+    public int width() {
+        return map[0].length;
+    }
+
+    public void setStartTile(final @NotNull PipeMapTile mapTile) {
+        map[start.y()][start.x()] = mapTile;
+    }
+
+    public PipeMapTile getTile(final int x,
+                               final int y) {
+        return map[y][x];
+    }
 }
