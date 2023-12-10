@@ -1,6 +1,7 @@
 package com.sephiraandy.day3;
 
 import com.sephiraandy.util.Puzzle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -9,14 +10,14 @@ public class Day3 extends Puzzle<Integer> {
         super(runTimeLogConsumer);
     }
 
-    public Integer solve1(final String input) {
+    public @NotNull Integer solve1(final @NotNull String input) {
         return EngineSchematic.parse(input)
             .getPartNumbers()
             .stream()
             .reduce(0, Integer::sum);
     }
 
-    public Integer solve2(final String input) {
+    public @NotNull Integer solve2(final @NotNull String input) {
         return EngineSchematic.parse(input)
             .getGears()
             .stream()

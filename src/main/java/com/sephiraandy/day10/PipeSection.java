@@ -5,12 +5,15 @@ import org.jetbrains.annotations.NotNull;
 import static com.sephiraandy.day10.GridVector.*;
 
 public class PipeSection implements PipeMapTile {
-    private final GridVector entry1;
-    private final GridVector exit1;
-    private final GridVector entry2;
-    private final GridVector exit2;
+    private final @NotNull GridVector entry1;
+    private final @NotNull GridVector exit1;
+    private final @NotNull GridVector entry2;
+    private final @NotNull GridVector exit2;
 
-    public PipeSection(GridVector entry1, GridVector exit1, GridVector entry2, GridVector exit2) {
+    public PipeSection(final @NotNull GridVector entry1,
+                       final @NotNull GridVector exit1,
+                       final @NotNull GridVector entry2,
+                       final @NotNull GridVector exit2) {
         this.entry1 = entry1;
         this.exit1 = exit1;
         this.entry2 = entry2;

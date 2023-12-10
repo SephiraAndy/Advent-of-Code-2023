@@ -1,6 +1,7 @@
 package com.sephiraandy.day10;
 
 import com.sephiraandy.util.Puzzle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -9,17 +10,22 @@ public class Day10 extends Puzzle<Integer> {
         super(s -> {});
     }
 
-    public Day10(Consumer<String> runTimeLogConsumer) {
+    public Day10(final @NotNull Consumer<String> runTimeLogConsumer) {
         super(runTimeLogConsumer);
     }
 
     @Override
-    public Integer solve1(String input) {
-        return PipeMap.parse(input).findLoop().perimeter() / 2;
+    public @NotNull Integer solve1(final @NotNull String input) {
+        return PipeMap.parse(input)
+            .map(PipeMap::perimeter)
+            .map(perimeter -> perimeter / 2)
+            .orElse(0);
     }
 
     @Override
-    public Integer solve2(String input) {
-        return PipeMap.parse(input).findLoop().area();
+    public @NotNull Integer solve2(final @NotNull String input) {
+        return PipeMap.parse(input)
+            .map(PipeMap::enclosedArea)
+            .orElse(0);
     }
 }

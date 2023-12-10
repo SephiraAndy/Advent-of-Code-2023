@@ -1,6 +1,7 @@
 package com.sephiraandy.day9;
 
 import com.sephiraandy.util.Puzzle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -20,7 +21,7 @@ public class Day9 extends Puzzle<Integer> {
     }
 
     @Override
-    public Integer solve1(final String input) {
+    public @NotNull Integer solve1(final @NotNull String input) {
         return lineStream(input)
             .map(Sequence::parseLine)
             .mapToInt(Sequence::getNext)
@@ -28,7 +29,7 @@ public class Day9 extends Puzzle<Integer> {
     }
 
     @Override
-    public Integer solve2(final String input) {
+    public @NotNull Integer solve2(final @NotNull String input) {
         return lineStream(input)
             .map(Sequence::parseLine)
             .mapToInt(Sequence::getPrevious)

@@ -1,7 +1,9 @@
 package com.sephiraandy.day10;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface PipeMapTile {
-    MoveResult move(GridVector delta, GridVector next);
+    @NotNull MoveResult move(@NotNull GridVector delta, GridVector next);
 
     boolean isHorizontal();
 

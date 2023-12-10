@@ -1,8 +1,10 @@
 package com.sephiraandy.day10;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StartTile implements PipeMapTile {
     @Override
-    public MoveResult move(GridVector delta, GridVector next) {
+    public @NotNull MoveResult move(@NotNull GridVector delta, GridVector next) {
         return MoveResult.complete(delta);
     }
 

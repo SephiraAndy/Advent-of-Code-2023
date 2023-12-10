@@ -2,14 +2,16 @@ package com.sephiraandy.day10;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 import static com.sephiraandy.day10.GridVector.*;
 import static com.sephiraandy.util.Input.asLines;
 
 public class PipeMap {
     private static final int DYNAMIC_PATH = 1;
     private static final int DYNAMIC_EMPTY = 0;
-    private final PipeMapTile[][] map;
-    private final GridVector start;
+    private final @NotNull PipeMapTile[][] map;
+    private final @NotNull GridVector start;
 
     private PipeMap(final @NotNull GridVector start,
                     final @NotNull PipeMapTile[][] map) {
@@ -17,7 +19,7 @@ public class PipeMap {
         this.map = map;
     }
 
-    public static @NotNull PipeMap parse(final @NotNull String input) {
+    public static @NotNull Optional<PipeMap> parse(final @NotNull String input) {
         final var rows = asLines(input);
         final var map = new PipeMapTile[rows.length][rows[0].length()];
         GridVector start = null;
@@ -33,13 +35,40 @@ public class PipeMap {
         }
 
         if (start == null) {
-            throw new RuntimeException("Cannot find the starting position. S");
+            return Optional.empty();
         }
 
-        return new PipeMap(start, map);
+        return Optional.of(new PipeMap(start, map));
     }
 
-    public @NotNull LoopResult findLoop() {
+    public int enclosedArea() {
+        var initialDirections = new GridVector[]{
+            RIGHT,
+            DOWN,
+            LEFT,
+            UP
+        };
+
+        for (var initialDirection : initialDirections) {
+            var validMove = move(new Move(start, start.translate(initialDirection)));
+
+            final var dynamicMap = new int[map.length][map[0].length];
+            dynamicMap[start.y()][start.x()] = DYNAMIC_PATH;
+
+            while (!validMove.invalid()) {
+                if (validMove.complete()) {
+                    map[start.y()][start.x()] = createMapTile(validMove.direction(), initialDirection);
+                    return calculateArea(dynamicMap);
+                }
+                dynamicMap[validMove.next().position().y()][validMove.next().position().x()] = DYNAMIC_PATH;
+                validMove = move(validMove.next());
+            }
+        }
+
+        return 0;
+    }
+
+    public int perimeter() {
 
         var initialDirections = new GridVector[]{
             RIGHT,
@@ -52,21 +81,17 @@ public class PipeMap {
             var validMove = move(new Move(start, start.translate(initialDirection)));
             var pathLength = 0;
 
-            final var dynamicMap = new int[map.length][map[0].length];
-            dynamicMap[start.y()][start.x()] = DYNAMIC_PATH;
-
             while (!validMove.invalid()) {
                 ++pathLength;
                 if (validMove.complete()) {
                     map[start.y()][start.x()] = createMapTile(validMove.direction(), initialDirection);
-                    return new LoopResult(pathLength, calculateArea(dynamicMap));
+                    return pathLength;
                 }
-                dynamicMap[validMove.next().position().y()][validMove.next().position().x()] = DYNAMIC_PATH;
                 validMove = move(validMove.next());
             }
         }
 
-        return new LoopResult(0, 0);
+        return 0;
     }
 
     private int calculateArea(final int @NotNull[] @NotNull[] dynamicMap) {

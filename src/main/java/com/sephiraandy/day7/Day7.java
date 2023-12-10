@@ -1,6 +1,7 @@
 package com.sephiraandy.day7;
 
 import com.sephiraandy.util.Puzzle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -13,7 +14,7 @@ public class Day7 extends Puzzle<Long> {
     }
 
     @Override
-    public Long solve1(String input) {
+    public @NotNull Long solve1(@NotNull String input) {
         final var handBids = lineStream(input)
             .map(HandBid::parseWithJacks)
             .sorted()
@@ -25,7 +26,7 @@ public class Day7 extends Puzzle<Long> {
     }
 
     @Override
-    public Long solve2(String input) {
+    public @NotNull Long solve2(@NotNull String input) {
         final var handBids = lineStream(input)
             .map(HandBid::parseWithJokers)
             .sorted()

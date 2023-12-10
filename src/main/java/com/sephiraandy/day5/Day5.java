@@ -2,6 +2,7 @@ package com.sephiraandy.day5;
 
 import com.sephiraandy.util.Input;
 import com.sephiraandy.util.Puzzle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -13,7 +14,7 @@ public class Day5 extends Puzzle<Long> {
         super(runTimeLogConsumer);
     }
 
-    public Long solve1(final String input) {
+    public @NotNull Long solve1(final @NotNull String input) {
         final var lines = Input.asLines(input);
         return Seeds.parse(lines[0]).stream()
             .map(fetchData(lines, "seed-to-soil")::map)
@@ -27,7 +28,7 @@ public class Day5 extends Puzzle<Long> {
             .orElse(0L);
     }
 
-    public Long solve2(final String input) {
+    public @NotNull Long solve2(final @NotNull String input) {
         final var lines = Input.asLines(input);
 
         return Seeds.parse(lines[0]).rangeStream()

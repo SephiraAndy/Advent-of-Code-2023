@@ -1,6 +1,7 @@
 package com.sephiraandy.day8;
 
 import com.sephiraandy.util.Puzzle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -18,13 +19,13 @@ public class Day8 extends Puzzle<Long> {
     }
 
     @Override
-    public Long solve1(final String input) {
+    public @NotNull Long solve1(final @NotNull String input) {
         final var startingPositions = new String[]{"AAA"};
         return DesertMap.parse(input).traverse(startingPositions, "ZZZ"::equals);
     }
 
     @Override
-    public Long solve2(final String input) {
+    public @NotNull Long solve2(final @NotNull String input) {
         final var desertMap = DesertMap.parse(input);
         final var startingPositions = desertMap.startingPositions();
         return desertMap.traverse(startingPositions, Day8::nodeEndsInZ);
