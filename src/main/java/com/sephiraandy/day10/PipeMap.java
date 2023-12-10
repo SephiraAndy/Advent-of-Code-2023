@@ -3,14 +3,12 @@ package com.sephiraandy.day10;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static com.sephiraandy.day10.GridVector.*;
 import static com.sephiraandy.day10.PipeMapTile.createMapTile;
 import static com.sephiraandy.util.Input.asLines;
 
-public class PipeMap {
+public class PipeMap implements PipeTileContainer {
     public static final GridVector[] INITIAL_DIRECTIONS = new GridVector[]{
         RIGHT,
         DOWN,
@@ -52,35 +50,20 @@ public class PipeMap {
         return start;
     }
 
-    public int enclosedArea() {
-        final var areaMeasurer = new AreaMeasurer(this);
-        return evaluate(areaMeasurer::init, () -> {
-        }, areaMeasurer::postUpdate, areaMeasurer::onComplete);
-    }
-
-    public int perimeter() {
-        final var perimeterMeasurer = new PerimeterMeasurer();
-        return evaluate(perimeterMeasurer::init, perimeterMeasurer::preUpdate, r -> {
-        }, perimeterMeasurer::onComplete);
-    }
-
-    public int evaluate(final @NotNull Consumer<GridVector> init,
-                        final @NotNull Runnable preUpdate,
-                        final @NotNull Consumer<GridVector> postUpdate,
-                        final @NotNull Function<MoveResult, Integer> onComplete) {
+    public Optional<Integer> evaluate(final @NotNull MapMeasurer evaluator) {
         for (var initialDirection : INITIAL_DIRECTIONS) {
             var validMove = move(new Move(start, start.translate(initialDirection)));
-            init.accept(initialDirection);
+            evaluator.init(initialDirection);
             while (!validMove.invalid()) {
-                preUpdate.run();
+                evaluator.preUpdate();
                 if (validMove.complete()) {
-                    return onComplete.apply(validMove);
+                    return Optional.of(evaluator.onComplete(validMove));
                 }
-                postUpdate.accept(validMove.next().position());
+                evaluator.postUpdate(validMove.next().position());
                 validMove = move(validMove.next());
             }
         }
-        return 0;
+        return Optional.empty();
     }
 
     private @NotNull MoveResult move(final @NotNull Move move) {

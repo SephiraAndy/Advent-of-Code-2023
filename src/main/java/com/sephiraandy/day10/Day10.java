@@ -17,7 +17,7 @@ public class Day10 extends Puzzle<Integer> {
     @Override
     public @NotNull Integer solve1(final @NotNull String input) {
         return PipeMap.parse(input)
-            .map(PipeMap::perimeter)
+            .flatMap(map -> map.evaluate(new PerimeterMeasurer()))
             .map(perimeter -> perimeter / 2)
             .orElse(0);
     }
@@ -25,7 +25,7 @@ public class Day10 extends Puzzle<Integer> {
     @Override
     public @NotNull Integer solve2(final @NotNull String input) {
         return PipeMap.parse(input)
-            .map(PipeMap::enclosedArea)
+            .flatMap(pipeMap -> pipeMap.evaluate(new AreaMeasurer(pipeMap)))
             .orElse(0);
     }
 }

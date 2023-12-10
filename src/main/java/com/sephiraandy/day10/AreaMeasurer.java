@@ -4,69 +4,67 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.sephiraandy.day10.PipeMapTile.createMapTile;
 
-class AreaMeasurer {
+class AreaMeasurer implements MapMeasurer {
 
-    private static final int DYNAMIC_EMPTY = 0;
-    private static final int DYNAMIC_PATH = 1;
-
-    private final PipeMap pipeMap;
+    private final @NotNull PipeTileContainer pipeTileContainer;
+    private final DynamicMap dynamicMap;
     private GridVector initialDirection;
-    private final int[][] dynamicMap;
     private int area;
 
-    AreaMeasurer(final @NotNull PipeMap pipeMap) {
-        this.pipeMap = pipeMap;
-        dynamicMap = new int[pipeMap.height()][pipeMap.width()];
+    AreaMeasurer(final @NotNull PipeTileContainer pipeTileContainer) {
+        this.pipeTileContainer = pipeTileContainer;
+        dynamicMap = new DynamicMap(pipeTileContainer.width(), pipeTileContainer.height());
     }
 
+    @Override
     public void init(final @NotNull GridVector initialDirection) {
         this.initialDirection = initialDirection;
-        final var start = pipeMap.start();
-        dynamicMap[start.y()][start.x()] = DYNAMIC_PATH;
+        dynamicMap.setAsPath(pipeTileContainer.start());
     }
 
+    @Override
+    public void preUpdate() {
+
+    }
+
+    @Override
     public int onComplete(final @NotNull MoveResult result) {
         final var startTile = createMapTile(result.direction(), initialDirection);
-        for (var y = 0; y < dynamicMap.length; ++y) {
-            PipeMapTile cornerStart = null;
-            var isOutside = true;
-            final var rowLength = dynamicMap[y].length;
-            for (var x = 0; x < rowLength; ++x) {
-                if (dynamicMap[y][x] == DYNAMIC_EMPTY) {
-                    if (!isOutside) {
+
+        dynamicMap.perRow(y -> {
+            final var rowReader = new RowReader();
+            dynamicMap.perCell(y, currentPosition -> {
+                if (dynamicMap.isEmptyAt(currentPosition)) {
+                    if (!rowReader.isOutside()) {
                         ++area;
                     }
-                    continue;
+                    return;
                 }
 
-                final var currentPosition = new GridVector(x, y);
-                final var pipeMapTile = currentPosition.equals(pipeMap.start())
+                final var pipeMapTile = currentPosition.equals(pipeTileContainer.start())
                     ? startTile
-                    : pipeMap.getTileAt(currentPosition);
+                    : pipeTileContainer.getTileAt(currentPosition);
 
                 if (pipeMapTile.isHorizontal()) {
-                    continue;
+                    return;
                 }
 
                 if (pipeMapTile.isVertical()) {
-                    isOutside = !isOutside;
-                    continue;
+                    rowReader.invertOutside();
+                    return;
                 }
 
-                if (cornerStart == null) {
-                    cornerStart = pipeMapTile;
-                    continue;
-                }
+                rowReader.acceptCornerTile(pipeMapTile);
+            });
 
-                isOutside = (cornerStart.polarity() == pipeMapTile.polarity()) != isOutside;
-                cornerStart = null;
-            }
-        }
+        });
+
         return area;
     }
 
+    @Override
     public void postUpdate(final @NotNull GridVector position) {
-        dynamicMap[position.y()][position.x()] = DYNAMIC_PATH;
+        dynamicMap.setAsPath(position);
     }
 
 }
