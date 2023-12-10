@@ -3,7 +3,6 @@ package com.sephiraandy.day10;
 import org.jetbrains.annotations.NotNull;
 
 import static com.sephiraandy.day10.GridVector.*;
-import static com.sephiraandy.day10.GridVector.LEFT;
 
 public interface PipeMapTile {
     @NotNull MoveResult move(@NotNull GridVector delta, GridVector next);
