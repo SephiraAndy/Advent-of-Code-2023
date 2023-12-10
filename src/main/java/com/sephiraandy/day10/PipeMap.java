@@ -90,7 +90,7 @@ public class PipeMap {
             : getTileAt(next).move(move.delta(), next);
     }
 
-    private @NotNull PipeMapTile getTileAt(final @NotNull GridVector position) {
+    public @NotNull PipeMapTile getTileAt(final @NotNull GridVector position) {
         return map[position.y()][position.x()];
     }
 
@@ -100,14 +100,5 @@ public class PipeMap {
 
     public int width() {
         return map[0].length;
-    }
-
-    public void setStartTile(final @NotNull PipeMapTile mapTile) {
-        map[start.y()][start.x()] = mapTile;
-    }
-
-    public PipeMapTile getTile(final int x,
-                               final int y) {
-        return map[y][x];
     }
 }

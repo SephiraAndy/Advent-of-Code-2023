@@ -30,7 +30,7 @@ class AreaMeasurer {
     }
 
     public void onComplete(final @NotNull MoveResult result) {
-        pipeMap.setStartTile(createMapTile(result.direction(), initialDirection));
+        final var startTile = createMapTile(result.direction(), initialDirection);
         area = 0;
         for (var y = 0; y < dynamicMap.length; ++y) {
             PipeMapTile cornerStart = null;
@@ -44,7 +44,11 @@ class AreaMeasurer {
                     continue;
                 }
 
-                final var pipeMapTile = pipeMap.getTile(x, y);
+                final var currentPosition = new GridVector(x, y);
+                final var pipeMapTile = currentPosition.equals(pipeMap.start())
+                    ? startTile
+                    : pipeMap.getTileAt(currentPosition);
+
                 if (pipeMapTile.isHorizontal()) {
                     continue;
                 }
