@@ -1,6 +1,7 @@
 package com.sephiraandy;
 
 import com.sephiraandy.day1.Day1;
+import com.sephiraandy.day10.Day10;
 import com.sephiraandy.day2.Day2;
 import com.sephiraandy.day3.Day3;
 import com.sephiraandy.day4.Day4;
@@ -27,6 +28,7 @@ public class PuzzleRunner {
         log(reportBuilder, 7, new Day7(reportBuilder::append)::solve);
         log(reportBuilder, 8, new Day8(reportBuilder::append)::solve);
         log(reportBuilder, 9, new Day9(reportBuilder::append)::solve);
+        log(reportBuilder, 10, new Day10(reportBuilder::append)::solve);
 
         try (final var fileWriter = new FileWriter("RunTimes.md")) {
             fileWriter.write(reportBuilder.toString());
