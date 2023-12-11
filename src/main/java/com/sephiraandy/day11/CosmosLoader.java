@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CosmosLoader {
-    public static @NotNull Cosmos parse(final @NotNull String input, long gapSize) {
+    public static @NotNull Cosmos parse(final @NotNull String input,
+                                        final long gapSize) {
         final var lines = Input.asLines(input);
-        final var emptyRows = new ArrayList<Integer>();
-        final var emptyColumns = new ArrayList<Integer>();
+        return new Cosmos(parseGalaxies(gapSize, lines, findEmptyColumns(lines), findEmptyRows(lines)));
+    }
 
+    private static @NotNull ArrayList<Integer> findEmptyRows(String[] lines) {
+        final var emptyRows = new ArrayList<Integer>();
         for (var y = 0; y < lines.length; ++y) {
             var isEmpty = true;
             for (var x = 0; x < lines[y].length(); ++x) {
@@ -24,7 +27,11 @@ public class CosmosLoader {
                 emptyRows.add(y);
             }
         }
+        return emptyRows;
+    }
 
+    private static @NotNull ArrayList<Integer> findEmptyColumns(String[] lines) {
+        final var emptyColumns = new ArrayList<Integer>();
         for (var x = 0; x < lines[0].length(); ++x) {
             var isEmpty = true;
             for (String line : lines) {
@@ -37,20 +44,29 @@ public class CosmosLoader {
                 emptyColumns.add(x);
             }
         }
+        return emptyColumns;
+    }
 
+    private static @NotNull ArrayList<CosmosVector> parseGalaxies(final long gapSize,
+                                                                  final String[] lines,
+                                                                  final @NotNull ArrayList<Integer> emptyColumns,
+                                                                  final @NotNull ArrayList<Integer> emptyRows) {
+        final var padding = gapSize - 1L;
         final var galaxies = new ArrayList<CosmosVector>();
         for (var y = 0; y < lines.length; ++y) {
             for (var x = 0; x < lines[y].length(); ++x) {
                 if (lines[y].charAt(x) == '#') {
-                    galaxies.add(new CosmosVector(x + (gapSize - 1L) * emptySpaceBefore(x, emptyColumns), y + (gapSize - 1L) * emptySpaceBefore(y, emptyRows)));
+                    final var galaxyX = x + padding * emptySpaceBefore(x, emptyColumns);
+                    final var galaxyY = y + padding * emptySpaceBefore(y, emptyRows);
+                    galaxies.add(new CosmosVector(galaxyX, galaxyY));
                 }
             }
         }
-
-        return new Cosmos(galaxies);
+        return galaxies;
     }
 
-    private static long emptySpaceBefore(final int compressedPosition, List<Integer> emptySpaces) {
+    private static long emptySpaceBefore(final int compressedPosition,
+                                         final @NotNull List<Integer> emptySpaces) {
         for (var i = 0; i < emptySpaces.size(); ++i) {
             if (compressedPosition < emptySpaces.get(i)) {
                 return i;
